@@ -59,8 +59,8 @@ Using nodeSSO comes very easy to use with everyauth and express.
 
 		app.listen(3001);
 	
-6. now you can authenticate calling: "auth?callbackUrl=http://www.google.ch" 
+6. now you can authenticate calling: "http://localhost:3001/auth?callbackUrl=http://www.google.ch" 
 	and 
-	deauthenticat calling: "deauth?callbackUrl=http://www.google.ch"
+	deauthenticat calling: "http://localhost:3001/deauth?callbackUrl=http://www.google.ch"
 
 7. after a successfull authentication you will receive the userIdentifier with the parameter userIdentifier
