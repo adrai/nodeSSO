@@ -19,10 +19,8 @@ everyauth
     .myHostname('http://localhost:3001')
     .findOrCreateUser( function (session, userMetadata) {
 		
-	  console.log(userMetadata);
-	  
+	  // Don't forget to save the userIdentifier!
 	  ssoJuggler.saveUserIdentifier(session, userMetadata.email);
-	  //session.userIdentifier = userMetadata.email;
 	  
       return userMetadata;
     })

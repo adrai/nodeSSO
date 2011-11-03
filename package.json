@@ -1,0 +1,18 @@
+{
+  "author": "adrai"
+  , "name": "nodeSSO"
+  , "version": "0.0.1"
+  , "private": false
+  , "main": "ssoJuggler.js"
+  , "engines": {
+        "node": "~v0.4.12"
+    }
+  , "dependencies": {
+    }
+  , "devDependencies": {
+      "express": ">=0.0.1"
+    , "everyauth": ">=0.0.1"
+  }
+  , "scripts": {
+  }
+}
