@@ -19,6 +19,7 @@ The project goal is to provide simple SSO in node.js.
 ## Quick Start
 
 Using nodeSSO comes very easy to use with everyauth and express.
+
 	1. Create a sso juggler
 		
 		var ssoJuggler = require('./nodeSSO/lib/ssoJuggler').createSSOJuggler({
