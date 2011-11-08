@@ -1,6 +1,7 @@
 var authPath= '/auth',
     deauthPath= '/deauth',
-    successPath= '/success';
+    successPath= '/success',
+    validatePath= '/validate';
     
 var ssoJuggler = require('../lib/ssoJuggler').createSSOJuggler({
         authenticationPath: '/login',
@@ -8,7 +9,8 @@ var ssoJuggler = require('../lib/ssoJuggler').createSSOJuggler({
         cookieExpirationTime: 20,
         authPath: authPath,
         deauthPath: deauthPath,
-        successPath: successPath
+        successPath: successPath,
+        validatePath: validatePath
 	});
 
 var everyauth = require('everyauth');
@@ -78,12 +80,35 @@ var app = express.createServer(
 
 ssoJuggler.addRoutes(app);
 
+var consumerToken = 'testToken';
+
 app.get('/', function(req, res){
 	res.writeHead(200, { 'Content-Type': 'text/html' });
-	res.write('Login <a href="'+authPath+'?callbackUrl=http://www.google.ch">'+authPath+'?callbackUrl=http://www.google.ch</a>');
+	res.write('Login <a href="'+authPath+'?callbackUrl=http://localhost:3001/val/">'+authPath+'?consumerToken='+consumerToken+'&callbackUrl=http://localhost:3001/val</a>');
 	res.write('</br>');
 	res.write('</br>');
 	res.write('Logout <a href="'+deauthPath+'?callbackUrl=http://www.google.ch">'+deauthPath+'?callbackUrl=http://www.google.ch</a>');
+	res.end();
+});
+
+app.get('/val', function(req, res){
+	var userToken = req.param('userToken');
+	res.redirect(validatePath+'?consumerToken=' + consumerToken + '&userToken=' + userToken + '&callbackUrl=http://localhost:3001/result');
+});
+
+app.get('/result', function(req, res){
+	var userIdentifier = req.param('userIdentifier');
+	var backConsumerToken = req.param('consumerToken');
+	res.writeHead(200, { 'Content-Type': 'text/html' });
+	if (backConsumerToken == consumerToken) {
+		if (userIdentifier) {
+			res.write('This is the user: '+userIdentifier);
+		} else {
+			res.write('User not valid');
+		}
+	} else {
+		res.write('Wrong sender');
+	}
 	res.end();
 });
 
