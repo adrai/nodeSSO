@@ -23,6 +23,11 @@ everyauth
 		
 	  // Don't forget to save the userIdentifier!
 	  ssoJuggler.saveUserIdentifier(session, userMetadata.email);
+	  ssoJuggler.saveAuthSource(session, 'openId');
+	  
+	  if (userMetadata.claimedIdentifier.indexOf('https://www.google.com/accounts/o8/id') == 0) {
+		  ssoJuggler.saveAuthSource(session, 'google');
+	  }
 	  
       return userMetadata;
     })
@@ -50,6 +55,7 @@ everyauth.password
       if (user.password !== password) return ['Login failed'];
             
       ssoJuggler.saveUserIdentifier(req.session, user.login);
+      ssoJuggler.saveAuthSource(session, 'password');
       ssoJuggler.saveRemember(req.session, req.param('remember') !== undefined);
       //req.session.userIdentifier = user.login;
       
