@@ -55,7 +55,7 @@ everyauth.password
       if (user.password !== password) return ['Login failed'];
             
       ssoJuggler.saveUserIdentifier(req.session, user.login);
-      ssoJuggler.saveAuthSource(session, 'password');
+      ssoJuggler.saveAuthSource(req.session, 'password');
       ssoJuggler.saveRemember(req.session, req.param('remember') !== undefined);
       //req.session.userIdentifier = user.login;
       
