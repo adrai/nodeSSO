@@ -1,7 +1,7 @@
 var authPath= '/auth',
     deauthPath= '/deauth',
     successPath= '/success',
-    validatePath= '/validate';
+    validatePath= '/val';
     
 var ssoJuggler = require('../lib/ssoJuggler').createSSOJuggler({
         authenticationPath: '/login',
@@ -90,7 +90,7 @@ var consumerToken = 'testToken';
 
 app.get('/', function(req, res){
 	res.writeHead(200, { 'Content-Type': 'text/html' });
-	res.write('Login <a href="'+authPath+'?consumerToken='+consumerToken+'&callbackUrl=http://localhost:3001/val/">'+authPath+'?consumerToken='+consumerToken+'&callbackUrl=http://localhost:3001/val</a>');
+	res.write('Login <a href="'+authPath+'?consumerToken='+consumerToken+'&callbackUrl=http://localhost:3001/validate/">'+authPath+'?consumerToken='+consumerToken+'&callbackUrl=http://localhost:3001/validate</a>');
 	res.write('</br>');
 	res.write('</br>');
 	res.write('Logout <a href="'+deauthPath+'?callbackUrl=http://www.google.ch">'+deauthPath+'?callbackUrl=http://www.google.ch</a>');
