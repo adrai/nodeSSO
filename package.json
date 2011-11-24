@@ -3,7 +3,7 @@
   , "name": "nodeSSO"
   , "version": "0.0.1"
   , "private": false
-  , "main": "ssoJuggler.js"
+  , "main": "index.js"
   , "engines": {
         "node": "~v0.4.12"
     }
