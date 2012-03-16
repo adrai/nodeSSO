@@ -4,7 +4,11 @@ The project goal is to provide simple SSO in node.js.
 
 ## Getting started
 
-1. Clone the project:
+1. get nodeSSO:
+    
+    npm install nodeSSO
+
+    or
 
     `git clone git@github.com:adrai/nodeSSO.git`
     
@@ -22,7 +26,8 @@ Using nodeSSO comes very easy to use with everyauth and express.
 
 1. Create a sso juggler
 	
-		var ssoJuggler = require('./nodeSSO/lib/ssoJuggler').createSSOJuggler({
+        var SsoJuggler = require('nodeSSO');
+		var ssoJuggler = new SsoJuggler({
 			authenticationPath: '/auth/openid?openid_identifier=https://www.google.com/accounts/o8/id'
 		});
 	

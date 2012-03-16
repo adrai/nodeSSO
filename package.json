@@ -1,18 +1,26 @@
 {
-  "author": "adrai"
+    "author": "adrai"
   , "name": "nodeSSO"
   , "version": "0.0.1"
   , "private": false
-  , "main": "index.js"
+  , "repository": {
+      "type": "git"
+    , "url": "git@github.com:adrai/nodeSSO.git"
+  }
+  , "keywords": ["sso", "login", "web", "session", "cookie", "user"]
+  , "main": "./index.js"
+  , "directories": {
+    "lib": "./lib"
+  }
   , "engines": {
-        "node": "~v0.4.12"
+        "node": ">= v0.4.0"
     }
   , "dependencies": {
-    }
+  }
   , "devDependencies": {
       "express": ">=0.0.1"
     , "everyauth": ">=0.0.1"
   }
-  , "scripts": {
-  }
+  , "scripts" : { 
+    } 
 }

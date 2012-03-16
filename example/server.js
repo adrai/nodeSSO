@@ -1,9 +1,11 @@
+var SsoJuggler = require('../lib/ssoJuggler');
+
 var authPath= '/auth',
     deauthPath= '/deauth',
     successPath= '/success',
     validatePath= '/val';
     
-var ssoJuggler = require('../lib/ssoJuggler').createSSOJuggler({
+var ssoJuggler = new SsoJuggler({
         authenticationPath: '/login',
         //authenticationPath: '/auth/openid?openid_identifier=https://www.google.com/accounts/o8/id',
         cookieExpirationTime: 20,
@@ -11,7 +13,7 @@ var ssoJuggler = require('../lib/ssoJuggler').createSSOJuggler({
         deauthPath: deauthPath,
         successPath: successPath,
         validatePath: validatePath
-	});
+    });
 
 var everyauth = require('everyauth');
 
@@ -20,15 +22,15 @@ everyauth
   .openid
     .myHostname('http://localhost:3001')
     .findOrCreateUser( function (session, userMetadata) {
-		
-	  // Don't forget to save the userIdentifier!
-	  ssoJuggler.saveUserIdentifier(session, userMetadata.email);
-	  ssoJuggler.saveAuthSource(session, 'openId');
-	  
-	  if (userMetadata.claimedIdentifier.indexOf('https://www.google.com/accounts/o8/id') == 0) {
-		  ssoJuggler.saveAuthSource(session, 'google');
-	  }
-	  
+
+      // Don't forget to save the userIdentifier!
+      ssoJuggler.saveUserIdentifier(session, userMetadata.email);
+      ssoJuggler.saveAuthSource(session, 'openId');
+      
+      if (userMetadata.claimedIdentifier.indexOf('https://www.google.com/accounts/o8/id') === 0) {
+          ssoJuggler.saveAuthSource(session, 'google');
+      }
+      
       return userMetadata;
     })
     .redirectPath(successPath);
@@ -38,19 +40,19 @@ everyauth.password
   .postLoginPath('/login') // Uri path that your login form POSTs to
   .loginView("login.jade")
   .extractExtraRegistrationParams( function (req) {
-	  return req;
+      return req;
   })
   .authenticate( function (login, password, req) {
-	  
-	  console.log(login);
-	  console.log(password);
-	  console.log(req.param('remember') !== undefined);
-	  
-	  var errors = [];
+      
+      console.log(login);
+      console.log(password);
+      console.log(req.param('remember') !== undefined);
+      
+      var errors = [];
       if (!login) errors.push('Missing login');
       if (!password) errors.push('Missing password');
       if (errors.length) return errors;
-      var user = { login: 'user', password: 'password'}
+      var user = { login: 'user', password: 'password'};
       if (!user) return ['Login failed'];
       if (user.password !== password) return ['Login failed'];
             
@@ -78,7 +80,7 @@ var express = require('express');
 //var RedisStore = require('connect-redis')(express);
 var app = express.createServer(
     express.bodyParser()
-  , express.static(__dirname + "/public")
+  , express.static(__dirname + '/public')
   , express.cookieParser()
   , express.session({ secret: 'htuayreve'/*, store: new RedisStore */})
   , everyauth.middleware()
@@ -89,33 +91,33 @@ ssoJuggler.addRoutes(app);
 var consumerToken = 'testToken';
 
 app.get('/', function(req, res){
-	res.writeHead(200, { 'Content-Type': 'text/html' });
-	res.write('Login <a href="'+authPath+'?consumerToken='+consumerToken+'&callbackUrl=http://localhost:3001/validate/">'+authPath+'?consumerToken='+consumerToken+'&callbackUrl=http://localhost:3001/validate</a>');
-	res.write('</br>');
-	res.write('</br>');
-	res.write('Logout <a href="'+deauthPath+'?callbackUrl=http://www.google.ch">'+deauthPath+'?callbackUrl=http://www.google.ch</a>');
-	res.end();
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.write('Login <a href="'+authPath+'?consumerToken='+consumerToken+'&callbackUrl=http://localhost:3001/validate/">'+authPath+'?consumerToken='+consumerToken+'&callbackUrl=http://localhost:3001/validate</a>');
+    res.write('</br>');
+    res.write('</br>');
+    res.write('Logout <a href="'+deauthPath+'?callbackUrl=http://www.google.ch">'+deauthPath+'?callbackUrl=http://www.google.ch</a>');
+    res.end();
 });
 
-app.get('/val', function(req, res){
-	var userToken = req.param('userToken');
-	res.redirect(validatePath+'?consumerToken=' + consumerToken + '&userToken=' + userToken + '&callbackUrl=http://localhost:3001/result');
+app.get('/validate', function(req, res){
+    var userToken = req.param('userToken');
+    res.redirect('/val?consumerToken=' + consumerToken + '&userToken=' + userToken + '&callbackUrl=http://localhost:3001/result');
 });
 
 app.get('/result', function(req, res){
-	var userIdentifier = req.param('userIdentifier');
-	var backConsumerToken = req.param('consumerToken');
-	res.writeHead(200, { 'Content-Type': 'text/html' });
-	if (backConsumerToken == consumerToken) {
-		if (userIdentifier) {
-			res.write('This is the user: '+userIdentifier);
-		} else {
-			res.write('User not valid');
-		}
-	} else {
-		res.write('Wrong sender');
-	}
-	res.end();
+    var userIdentifier = req.param('userIdentifier');
+    var backConsumerToken = req.param('consumerToken');
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    if (backConsumerToken == consumerToken) {
+        if (userIdentifier) {
+            res.write('This is the user: '+userIdentifier);
+        } else {
+            res.write('User not valid');
+        }
+    } else {
+        res.write('Wrong sender');
+    }
+    res.end();
 });
 
 everyauth.helpExpress(app);
