@@ -6,7 +6,7 @@ The project goal is to provide simple SSO in node.js.
 
 1. get nodeSSO:
     
-    npm install nodeSSO
+    `npm install nodeSSO`
 
     or
 
